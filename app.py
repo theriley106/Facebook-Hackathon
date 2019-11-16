@@ -58,16 +58,17 @@ def webhook_action():
 	for entry in data['entry']:
 		user_message = entry['messaging'][0]['message']['text']
 		send_sms('8645674106', user_message)
-		user_id = entry['messaging'][0]['sender']['id']
-		response = {
-			'recipient': {'id': user_id},
-			'message': {}
-		}
-		response['message']['text'] = handle_message(user_id, user_message)
-		r = requests.post(
-			'https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token, json=response)
-		print("URL + {}".format('https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token))
-		print(response)
+		'''
+								user_id = entry['messaging'][0]['sender']['id']
+								response = {
+									'recipient': {'id': user_id},
+									'message': {}
+								}
+								response['message']['text'] = handle_message(user_id, user_message)
+								r = requests.post(
+									'https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token, json=response)
+								print("URL + {}".format('https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token))
+								print(response)'''
 	return Response(response="EVENT RECEIVED",status=200)
 
 @app.route('/webhook_dev', methods=['POST'])
