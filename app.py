@@ -40,7 +40,7 @@ def sms_reply():
 	resp = MessagingResponse()
 	response_message = 'Hello {}, You said:{}'.format(number, message_body)
 	resp.message(response_message)
-
+	print("SENDING MESSAGE")
 	return str(resp)
 
 @app.route('/webhook', methods=['GET'])
@@ -63,6 +63,8 @@ def webhook_action():
 		response['message']['text'] = handle_message(user_id, user_message)
 		r = requests.post(
 			'https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token, json=response)
+		print("URL + {}".format('https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token))
+		print(response)
 	return Response(response="EVENT RECEIVED",status=200)
 
 @app.route('/webhook_dev', methods=['POST'])
