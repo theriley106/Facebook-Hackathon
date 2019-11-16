@@ -37,12 +37,11 @@ def send_sms(number, body):
 def sms_reply():
 	number = request.form['From']
 	message_body = request.form['Body']
-
-	resp = MessagingResponse()
-	response_message = 'Hello {}, You said:{}'.format(number, message_body)
-	resp.message(response_message)
+	message_body = gen_fb_message(message_body)
+	r = requests.post(
+			'https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token, json=message_body)
+	# This is sendign the message via messenger
 	print("SENDING MESSAGE")
-	return str(resp)
 
 def gen_fb_message(text):
 	return {'message': {'text': text}, 'recipient': {'id': FB_RECIPIENT}}
