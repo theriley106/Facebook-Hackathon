@@ -21,7 +21,6 @@ import re
 
 app = Flask(__name__)
 
-FB_NUM_2 = 
 
 def cleanNumber(number):
 	return "+1" + ''.join(re.findall("\d+", number.replace("+1", "")))
@@ -41,7 +40,7 @@ def encode_text(string):
 def decode_text(zlibText):
 	return zlibText.decode('zlib')
 
-def process_everything
+# def process_everything
 
 # This is the route belonging to FB that encodes the text string
 @app.route("/sms", methods=['GET', 'POST'])
@@ -134,5 +133,5 @@ def index():
 	return "Hello there, I'm a facebook messenger bot."
 
 if __name__ == '__main__':
-	send_sms("", "")
+	# send_sms("", "")
 	app.run(debug=True, host='0.0.0.0')
