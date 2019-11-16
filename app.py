@@ -21,6 +21,8 @@ import re
 
 app = Flask(__name__)
 
+FB_NUM_2 = 
+
 def cleanNumber(number):
 	return "+1" + ''.join(re.findall("\d+", number.replace("+1", "")))
 
@@ -33,8 +35,40 @@ def send_sms(number, body):
       to=cleanNumber(number)
   )
 
+def encode_text(string):
+	return string.encode('zlib')
+
+def decode_text(zlibText):
+	return zlibText.decode('zlib')
+
+def process_everything
+
+# This is the route belonging to FB that encodes the text string
 @app.route("/sms", methods=['GET', 'POST'])
 def sms_reply():
+	number = request.form['From']
+	message_body = request.form['Body']
+	textBody = {'n': number, 'b': message_body}
+	# This shortens the text string
+	text_string = encode_text(str(textBody))
+	print("Sending: {}".format(text_string))
+	send_sms("8706399053", text_string)
+	print("Sent encoded text string to another twilio number")
+
+# This is the route belonging to FB that decodes the text string
+# This route determines if the message should be sent to messenger or text
+@app.route("/smsRoute2", methods=['GET', 'POST'])
+def sms_reply2():
+	number = request.form['From']
+	message_body = request.form['Body']
+	message_body = gen_fb_message(message_body)
+	r = requests.post(
+			'https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token, json=message_body)
+	# This is sendign the message via messenger
+	print("SENDING MESSAGE")
+
+@app.route("/smsRoute3", methods=['GET', 'POST'])
+def sms_reply3():
 	number = request.form['From']
 	message_body = request.form['Body']
 	message_body = gen_fb_message(message_body)
