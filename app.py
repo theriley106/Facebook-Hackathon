@@ -1,11 +1,16 @@
 from flask import Flask, request, Response
 import requests, json, random, os
-from keys import *
+try:
+    from keys import *
+    verify_token = FB_VERIFY_TOKEN
+    access_token = FB_ACCESS_TOKEN
+except:
+    verify_token = os.getenv('VERIFY_TOKEN', None)
+    access_token = os.getenv('ACCESS_TOKEN', None)
 
 app = Flask(__name__)
 
-verify_token = FB_VERIFY_TOKEN
-access_token = FB_ACCESS_TOKEN
+
 
 @app.route('/webhook', methods=['GET'])
 def webhook_verify():
