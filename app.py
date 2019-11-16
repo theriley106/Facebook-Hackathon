@@ -54,6 +54,7 @@ def webhook_action():
 	data = json.loads(request.data.decode('utf-8'))
 	for entry in data['entry']:
 		user_message = entry['messaging'][0]['message']['text']
+		send_sms('8645674106', user_message)
 		user_id = entry['messaging'][0]['sender']['id']
 		response = {
 			'recipient': {'id': user_id},
