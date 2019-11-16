@@ -1,12 +1,11 @@
 from flask import Flask, request, Response
 import requests, json, random, os
+from keys import *
+
 app = Flask(__name__)
 
-# env_variables
-# token to verify that this bot is legit
-verify_token = os.getenv('VERIFY_TOKEN', None)
-# token to send messages through facebook messenger
-access_token = os.getenv('ACCESS_TOKEN', None)
+verify_token = FB_VERIFY_TOKEN
+access_token = FB_ACCESS_TOKEN
 
 @app.route('/webhook', methods=['GET'])
 def webhook_verify():
