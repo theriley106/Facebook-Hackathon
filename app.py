@@ -11,6 +11,7 @@ except:
 	access_token = os.getenv('ACCESS_TOKEN', None)
 	account_sid = os.getenv('TWILIO_ID', None)
 	auth_token = os.getenv('TWILIO_AUTH', None)
+	FB_RECIPIENT = os.getenv('FB_RECIPIENT', None)
 
 from flask import Flask, request, redirect
 from twilio import twiml
@@ -42,6 +43,9 @@ def sms_reply():
 	resp.message(response_message)
 	print("SENDING MESSAGE")
 	return str(resp)
+
+def gen_fb_message(text):
+	return {'message': {'text': text}, 'recipient': {'id': FB_RECIPIENT}}
 
 @app.route('/webhook', methods=['GET'])
 def webhook_verify():
