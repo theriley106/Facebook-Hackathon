@@ -4,14 +4,32 @@ try:
 	from keys import *
 	verify_token = FB_VERIFY_TOKEN
 	access_token = FB_ACCESS_TOKEN
+	account_sid = TWILIO_ID
+	auth_token = TWILIO_AUTH
 except:
 	verify_token = os.getenv('VERIFY_TOKEN', None)
 	access_token = os.getenv('ACCESS_TOKEN', None)
+	account_sid = os.getenv('TWILIO_ID', None)
+	auth_token = os.getenv('TWILIO_AUTH', None)
+
 from flask import Flask, request, redirect
 from twilio import twiml
+from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 
 app = Flask(__name__)
+
+def cleanNumber(number):
+	return "+1" + ''.join(re.findall("\d+", number.replace("+1", "")))
+
+def send_sms(number, body):
+	client = Client(account_sid, auth_token)
+
+	message = client.messages.create(
+      body=body,
+      from_='+12054311920',
+      to=cleanNumber(number)
+  )
 
 @app.route("/sms", methods=['GET', 'POST'])
 def sms_reply():
@@ -74,4 +92,5 @@ def index():
 	return "Hello there, I'm a facebook messenger bot."
 
 if __name__ == '__main__':
+	send_sms("", "")
 	app.run(debug=True, host='0.0.0.0')
