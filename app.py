@@ -73,8 +73,10 @@ def process_message(message_body):
 		print(request.form)
 		print("Trying to decode ^")
 		message_body = gen_fb_message(decode_text(message_body))
+		print("Messagebody: {}".format(message_body))
 		r = requests.post(
 				'https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token, json=message_body)
+		print r.text
 	else:
 		send_sms('4153080453', message_body['text'])
 
