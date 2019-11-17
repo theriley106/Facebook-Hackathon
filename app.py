@@ -104,6 +104,7 @@ def webhook_verify():
 def webhook_action():
 	data = json.loads(request.data.decode('utf-8'))
 	for entry in data['entry']:
+		print("USER ID: {}".format(entry['messaging'][0]['sender']['id']))
 		user_message = entry['messaging'][0]['message']
 		process_message(user_message)
 		
