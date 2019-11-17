@@ -75,7 +75,7 @@ def process_message(message_body):
 		r = requests.post(
 				'https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token, json=message_body)
 	else:
-		send_sms('4153080453', user_message['text'])
+		send_sms('4153080453', message_body['text'])
 
 
 @app.route("/smsRoute3", methods=['GET', 'POST'])
