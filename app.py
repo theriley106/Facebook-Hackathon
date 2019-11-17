@@ -35,9 +35,11 @@ def send_sms(number, body):
   )
 
 def encode_text(string):
+	return string
 	return string.encode('ascii').encode('zlib_codec')
 
 def decode_text(zlibText):
+	return string
 	return zlibText.decode('zlib_codec').decode('ascii')
 
 # def process_everything
