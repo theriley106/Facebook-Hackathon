@@ -49,7 +49,7 @@ def sms_reply():
 	message_body = request.form['Body']
 	textBody = {'n': number, 'b': message_body}
 	# This shortens the text string
-	text_string = encode_text(textBody)
+	text_string = encode_text(json.dumps(textBody))
 	print("Sending: {}".format(text_string))
 	send_sms("8706399053", text_string)
 	print("Sent encoded text string to another twilio number")
