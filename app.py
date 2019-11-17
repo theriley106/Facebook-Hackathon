@@ -60,7 +60,7 @@ def sms_reply():
 def sms_reply2():
 	number = request.form['From']
 	message_body = request.form['Body']
-	message_body = gen_fb_message(message_body)
+	message_body = gen_fb_message(decode_text(message_body))
 	r = requests.post(
 			'https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token, json=message_body)
 	# This is sendign the message via messenger
