@@ -62,7 +62,8 @@ def sms_reply():
 @app.route("/smsRoute2", methods=['GET', 'POST'])
 def sms_reply2():
 	number = request.form['From']
-	message_body = json.load(request.form['Body'])
+	message_body = json.loads(request.form['Body'])
+	process_message(message_body)
 	# This specifies where the message is posted
 
 
