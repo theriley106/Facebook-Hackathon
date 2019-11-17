@@ -1,8 +1,3 @@
-# encoding=utf8
-import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
-
 from flask import Flask, request, Response
 import requests, json, random, os
 try:
@@ -54,7 +49,7 @@ def sms_reply():
 	message_body = request.form['Body']
 	textBody = {'n': number, 'b': message_body}
 	# This shortens the text string
-	text_string = encode_text(str(textBody))
+	text_string = encode_text(textBody)
 	print("Sending: {}".format(text_string))
 	send_sms("8706399053", text_string)
 	print("Sent encoded text string to another twilio number")
