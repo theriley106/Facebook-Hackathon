@@ -72,7 +72,7 @@ def process_message(message_body):
 		# M means the message is intented for fb messenger
 		print(request.form)
 		print("Trying to decode ^")
-		message_body = gen_fb_message(decode_text(message_body))
+		message_body = gen_fb_message(decode_text(message_body['b']))
 		print("Messagebody: {}".format(message_body))
 		r = requests.post(
 				'https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token, json=message_body)
