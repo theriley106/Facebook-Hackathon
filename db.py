@@ -1,7 +1,8 @@
 import pymongo
 import json
 from bson.json_util import dumps
-from keys import *
+import os
+import bson
 
 client = pymongo.MongoClient(os.getenv('MONGO', None))
 
@@ -15,7 +16,7 @@ def read():
 		print(post)
 
 def get_entry(idVal):
-	return db.posts.find_one({"id": idVal})['string']
+	return json.loads(db.posts.find_one({"id": idVal})['string'])
 
 
 def update():

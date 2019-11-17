@@ -20,6 +20,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 import re
 import db
 import random
+from bson import BSON
 
 app = Flask(__name__)
 
@@ -39,11 +40,12 @@ def send_sms(number, body):
 def encode_text(string):
 	# return string
 	idVal = ''.join([str(random.randint(1,9)) for i in range(10)])
-	db.add(idVal, string.encode('ascii').encode('zlib_codec'))
+	bsonVal = string.encode('utf-8').encode('zlib_codec')
+	db.add(idVal, string)
 	return idVal
 
 def decode_text(zlibText):
-	return db.get_entry('string').decode('zlib_codec').decode('ascii')
+	return db.get_entry(zlibText)
 	return zlibText
 	return zlibText.decode('zlib_codec').decode('ascii')
 
@@ -67,17 +69,21 @@ def sms_reply():
 @app.route("/smsRoute2", methods=['GET', 'POST'])
 def sms_reply2():
 	number = request.form['From']
-	message_body = json.loads(request.form['Body'])
+	message_body = decode_text(request.form['Body'])
 	process_message(message_body)
 	# This specifies where the message is posted
 
+@app.route('/')
+def hello():
+    return redirect("https://github.com/theriley106/Facebook-Hackathon", code=302)
 
 def process_message(message_body):
+	print("MESSAGE BODY: {}".format(message_body))
 	if message_body.get('t') == 'm':
 		# M means the message is intented for fb messenger
 		print(request.form)
 		print("Trying to decode ^")
-		message_body = gen_fb_message(decode_text(message_body['b']))
+		message_body = gen_fb_message(message_body['b'])
 		print("Messagebody: {}".format(message_body))
 		r = requests.post(
 				'https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token, json=message_body)
@@ -149,10 +155,6 @@ def handle_message(user_id, user_message):
 def privacy():
 	# needed route if you need to make your bot public
 	return "This facebook messenger bot's only purpose is to [...]. That's all. We don't use it in any other way."
-
-@app.route('/', methods=['GET'])
-def index():
-	return "Hello there, I'm a facebook messenger bot."
 
 if __name__ == '__main__':
 	# send_sms("", "")
