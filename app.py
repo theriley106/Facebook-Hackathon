@@ -18,6 +18,8 @@ from twilio import twiml
 from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 import re
+import db
+import random
 
 app = Flask(__name__)
 
@@ -35,10 +37,13 @@ def send_sms(number, body):
   )
 
 def encode_text(string):
-	return string
-	return string.encode('ascii').encode('zlib_codec')
+	# return string
+	idVal = ''.join([str(random.randint(1,9)) for i in range(10)])
+	db.add(idVal, string.encode('ascii').encode('zlib_codec'))
+	return idVal
 
 def decode_text(zlibText):
+	return db.get_entry('string').decode('zlib_codec').decode('ascii')
 	return zlibText
 	return zlibText.decode('zlib_codec').decode('ascii')
 
