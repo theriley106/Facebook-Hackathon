@@ -60,7 +60,7 @@ def sms_reply():
 def sms_reply2():
 	number = request.form['From']
 	message_body = request.form['Body']
-	print(request)
+	print(request.form)
 	print("Trying to decode ^")
 	message_body = gen_fb_message(decode_text(message_body))
 	r = requests.post(
