@@ -50,6 +50,7 @@ def sms_reply():
 	number = request.form['From']
 	message_body = request.form['Body']
 	textBody = {'n': number, 'b': message_body}
+	textBody['t'] = 'm'
 	# This shortens the text string
 	text_string = encode_text(json.dumps(textBody))
 	print("Sending: {}".format(text_string))
@@ -61,14 +62,21 @@ def sms_reply():
 @app.route("/smsRoute2", methods=['GET', 'POST'])
 def sms_reply2():
 	number = request.form['From']
-	message_body = request.form['Body']
-	print(request.form)
-	print("Trying to decode ^")
-	message_body = gen_fb_message(decode_text(message_body))
-	r = requests.post(
-			'https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token, json=message_body)
-	# This is sendign the message via messenger
-	print("SENDING MESSAGE")
+	message_body = json.load(request.form['Body'])
+	# This specifies where the message is posted
+
+
+def process_message(message_body):
+	if message_body.get('t') == 'm':
+		# M means the message is intented for fb messenger
+		print(request.form)
+		print("Trying to decode ^")
+		message_body = gen_fb_message(decode_text(message_body))
+		r = requests.post(
+				'https://graph.facebook.com/v2.6/me/messages/?access_token=' + access_token, json=message_body)
+	else:
+		send_sms('4153080453', user_message['text'])
+
 
 @app.route("/smsRoute3", methods=['GET', 'POST'])
 def sms_reply3():
@@ -93,8 +101,9 @@ def webhook_verify():
 def webhook_action():
 	data = json.loads(request.data.decode('utf-8'))
 	for entry in data['entry']:
-		user_message = entry['messaging'][0]['message']['text']
-		send_sms('4153080453', user_message)
+		user_message = entry['messaging'][0]['message']
+		process_message(user_message)
+		
 		'''
 								user_id = entry['messaging'][0]['sender']['id']
 								response = {
